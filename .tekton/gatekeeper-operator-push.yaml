@@ -6,8 +6,15 @@ metadata:
     build.appstudio.redhat.com/commit_sha: '{{revision}}'
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
     pipelinesascode.tekton.dev/max-keep-runs: "3"
-    pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch
-      == "release-3.15"
+    pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch == "release-3.15" &&
+      (".tekton/gatekeeper-operator-pull-request.yaml".pathChanged() ||
+       ".tekton/gatekeeper-operator-push.yaml".pathChanged() ||
+       "api/*".pathChanged() ||
+       "controllers/*".pathChanged() ||
+       "pkg/*".pathChanged() ||
+       "go.mod".pathChanged() ||
+       "main.go".pathChanged() ||
+       "Dockerfile".pathChanged())
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: gatekeeper-operator-test
