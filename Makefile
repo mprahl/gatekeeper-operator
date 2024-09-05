@@ -35,7 +35,7 @@ endif
 # IMAGE_TAG_BASE defines the image registry namespace and part of the image name for remote images.
 # This variable is used to construct full image tags for bundle and catalog images.
 VERSION_TAG ?= v$(VERSION)
-REPO ?= quay.io/gatekeeper
+REPO ?= quay.io/redhat-user-workloads/mprahl-tenant/gatekeeper-operator-test
 IMAGE_TAG_BASE ?= $(REPO)/gatekeeper-operator
 IMG ?= $(IMAGE_TAG_BASE):$(VERSION_TAG)
 
@@ -99,12 +99,12 @@ help: ## Display this help.
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
 .PHONY: clean
-clean: IMG = quay.io/gatekeeper/gatekeeper-operator:$(VERSION_TAG)
+clean: IMG = quay.io/redhat-user-workloads/mprahl-tenant/gatekeeper-operator-test/gatekeeper-operator:$(VERSION_TAG)
 clean: delete-test-cluster clean-manifests ## Clean up build artifacts.
 	rm $(LOCAL_BIN)/*
 
 .PHONY: clean-manifests
-clean-manifests: IMG = quay.io/gatekeeper/gatekeeper-operator:$(VERSION_TAG)
+clean-manifests: IMG = quay.io/redhat-user-workloads/mprahl-tenant/gatekeeper-operator-test/gatekeeper-operator:$(VERSION_TAG)
 clean-manifests: kustomize unpatch-deployment bundle
 	# Reset all kustomization.yaml files
 	git restore **/kustomization.yaml
@@ -187,7 +187,7 @@ update-bindata: go-bindata ## Update bindata.go file.
 	rm -rf ./$(GATEKEEPER_MANIFEST_DIR)-rendered
 	$(MAKE) fmt
 
-GATEKEEPER_IMAGE ?= quay.io/gatekeeper/gatekeeper
+GATEKEEPER_IMAGE ?= quay.io/redhat-user-workloads/mprahl-tenant/gatekeeper-operator-test/gatekeeper
 
 .PHONY: update-gatekeeper-image
 update-gatekeeper-image: ## Update Gatekeeper image in manifests.
@@ -220,10 +220,6 @@ build: generate fmt vet ## Build manager binary.
 .PHONY: docker-build
 docker-build: test ## Build docker image with the manager.
 	$(DOCKER) build --platform linux/$(GOARCH) --build-arg GOOS=linux --build-arg GOARCH=$(GOARCH) --build-arg LDFLAGS=${LDFLAGS} -t ${IMG} .
-
-.PHONY: docker-push
-docker-push: ## Push docker image with the manager.
-	$(DOCKER) push ${IMG} $(TLS_VERIFY)
 
 .PHONY: release
 release: manifests kustomize patch-deployment
@@ -330,10 +326,6 @@ bundle: operator-sdk manifests kustomize ## Generate bundle manifests and metada
 bundle-build: ## Build the bundle image.
 	$(DOCKER) build -f bundle.Dockerfile -t $(BUNDLE_IMG) .
 
-.PHONY: bundle-push
-bundle-push: ## Push the bundle image.
-	$(MAKE) docker-push IMG=$(BUNDLE_IMG)
-
 OPM = $(LOCAL_BIN)/opm
 
 $(OPM):
@@ -356,10 +348,7 @@ else
 	$(OPM) index add --bundles $(BUNDLE_IMG) --tag $(BUNDLE_INDEX_IMG) -c $(DOCKER) $(USE_HTTP)
 endif
 
-.PHONY: bundle-index-push
-bundle-index-push: ## Push the bundle index image.
-	$(MAKE) docker-push IMG=$(BUNDLE_INDEX_IMG)
-
+# TODO: Need to fix this for OLM test
 .PHONY: build-and-push-bundle-images
 build-and-push-bundle-images: docker-build docker-push ## Build and push bundle and bundle index images.
 	$(MAKE) bundle

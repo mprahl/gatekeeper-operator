@@ -19,7 +19,7 @@ metadata:
     olm.skipRange: "<3.15.1"
     operators.operatorframework.io/builder: operator-sdk-v1.34.1
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v3
-  name: gatekeeper-operator.v3.15.1
+  name: gatekeeper-operator-product.v3.15.1
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -386,7 +386,7 @@ spec:
                 - --upstream=http://127.0.0.1:8080/
                 - --logtostderr=true
                 - --v=10
-                image: gcr.io/kubebuilder/kube-rbac-proxy:v0.8.0
+                image: quay.io/redhat-user-workloads/crt-redhat-acm-tenant/release-mce-26/kube-rbac-proxy-mce-26@sha256:00583dd4ad91cf09021529758a998497808d1ad377a4f76b6b2d2dc3afe9a11f
                 name: kube-rbac-proxy
                 ports:
                 - containerPort: 8443
@@ -408,8 +408,8 @@ spec:
                 - /manager
                 env:
                 - name: RELATED_IMAGE_GATEKEEPER
-                  value: quay.io/gatekeeper/gatekeeper:v3.15.1
-                image: quay.io/gatekeeper/gatekeeper-operator:v3.15.1
+                  value: quay.io/redhat-user-workloads/mprahl-tenant/gatekeeper-operator-test/gatekeeper@sha256:814fc2b812b87d3c93bf904f33f22b82239473f66c51a55d90788f4460ee9610
+                image: quay.io/redhat-user-workloads/mprahl-tenant/gatekeeper-operator-test/gatekeeper-operator@sha256:a1bc06d8312e5725bb46c7ee26fad1aefc7f8b06322b8de9673e225d97cba2d5
                 imagePullPolicy: Always
                 livenessProbe:
                   httpGet:
@@ -549,5 +549,5 @@ spec:
   relatedImages:
   - image: quay.io/gatekeeper/gatekeeper:v3.15.1
     name: gatekeeper
-  replaces: gatekeeper-operator.v3.14.1
+  replaces: gatekeeper-operator-product.v3.14.1
   version: "3.15.1"

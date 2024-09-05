@@ -3,7 +3,7 @@
 [![OLM-Tests](https://github.com/gatekeeper/gatekeeper-operator/actions/workflows/olm_tests.yaml/badge.svg)](https://github.com/gatekeeper/gatekeeper-operator/actions/workflows/olm_tests.yaml)
 [![Create Release](https://github.com/gatekeeper/gatekeeper-operator/actions/workflows/release.yaml/badge.svg)](https://github.com/gatekeeper/gatekeeper-operator/actions/workflows/release.yaml)
 [![Image](https://github.com/gatekeeper/gatekeeper-operator/actions/workflows/image.yaml/badge.svg)](https://github.com/gatekeeper/gatekeeper-operator/actions/workflows/image.yaml)
-[![Docker Repository on Quay](https://img.shields.io/:Image-Quay-blue.svg)](https://quay.io/repository/gatekeeper/gatekeeper-operator)
+[![Docker Repository on Quay](https://img.shields.io/:Image-Quay-blue.svg)](https://quay.io/redhat-user-workloads/mprahl-tenant/gatekeeper-operator-test/gatekeeper-operator)
 
 Operator for OPA Gatekeeper
 
